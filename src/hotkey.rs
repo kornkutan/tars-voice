@@ -84,15 +84,16 @@ pub fn spawn(combo: Combo, tx: Sender<HotkeyEvent>) {
                         _ => {}
                     }
                     if *k == combo.key
-                        && !ptt_active.get()
                         && alt_down.get() == combo.alt
                         && ctrl_down.get() == combo.ctrl
                         && shift_down.get() == combo.shift
                         && meta_down.get() == combo.meta
                     {
-                        ptt_active.set(true);
-                        let _ = tx.send(HotkeyEvent::PttStart);
-                        return None; // swallow: option+space must not type U+00A0
+                        if !ptt_active.get() {
+                            ptt_active.set(true);
+                            let _ = tx.send(HotkeyEvent::PttStart);
+                        }
+                        return None; // swallow initial press and auto-repeats
                     }
                 }
                 EventType::KeyRelease(k) => {
