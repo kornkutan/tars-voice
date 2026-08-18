@@ -24,8 +24,9 @@ Local-only speech: whisper STT + macOS `say` TTS. No cloud speech
 providers.
 
 State is written to `~/.pi/voice/state.json`, read by the Pi
-status-bar extension (`~/.pi/agent/extensions/voice/`) so you get a `VOICE:`
-indicator and `/voice start|stop|status` slash commands inside Pi.
+status-bar extension (`~/.pi/agent/extensions/voice/`) so you get a `[● state]`
+badge on the status bar and `/voice help|start|stop|status` slash commands
+inside Pi.
 
 ## Build
 
@@ -66,7 +67,8 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
   "say": true,
   "say_voice": null,
   "language": "auto",
-  "no_session": false
+  "no_session": false,
+  "mode": "agent"
 }
 ```
 
@@ -96,8 +98,8 @@ The companion extension is bundled in this repo (`pi-extension/`); `install.sh`
 deploys it to `~/.pi/agent/extensions/voice/` where Pi auto-discovers it.
 Restart Pi after installing. It adds:
 
-- a `VOICE:` status-bar line (idle / REC / working / error)
-- the `/voice start|stop|status` slash command
+- a `[● state]` status-bar badge (idle / REC / working / error), colored by state
+- the `/voice help|start|stop|status` slash command
 - `/voice dictate` and `/voice agent` to switch modes; the daemon picks up the
   change on the next key press (config is hot-reloaded per event)
 

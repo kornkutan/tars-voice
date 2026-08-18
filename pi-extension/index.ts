@@ -66,22 +66,22 @@ function statusText(st: DaemonState | null): string | undefined {
 	if (!pidAlive(st.pid)) return undefined;
 	switch (st.state) {
 		case "recording":
-			return "VOICE: REC";
+			return "● REC";
 		case "transcribing":
-			return "VOICE: transcribing";
+			return "● transcribing";
 		case "working":
 			return st.transcript
-				? `VOICE: working (${truncate(st.transcript, 30)})`
-				: "VOICE: working";
+				? `● working (${truncate(st.transcript, 30)})`
+				: "● working";
 		case "dictating":
-			return "VOICE: dictating";
+			return "● dictating";
 		case "error":
-			return "VOICE: error";
+			return "● error";
 		case "starting":
-			return "VOICE: starting";
+			return "● starting";
 		case "idle":
 		default:
-			return "VOICE: idle";
+			return "● idle";
 	}
 }
 
@@ -143,12 +143,36 @@ export default function (pi: ExtensionAPI) {
 
 	pi.registerCommand("voice", {
 		description:
-			"Voice control: /voice start|stop|status (push-to-talk via tars-voice daemon)",
+			"Voice control: /voice help|start|stop|status|dictate|agent (push-to-talk via tars-voice daemon)",
 		handler: async (args, ctx) => {
 			const cfg = loadConfig();
 			const binary = cfg.binaryPath ?? DEFAULT_BINARY;
 			const cwd = ctx.sessionManager.getCwd();
 			const sub = (args ?? "").trim().split(/\s+/)[0] ?? "status";
+
+			if (sub === "help" || sub === "-h" || sub === "--help") {
+				let globalCfg: Record<string, unknown> = {};
+				try {
+					globalCfg = JSON.parse(readFileSync(path.join(os.homedir(), ".pi", "tars-voice.json"), "utf-8"));
+				} catch {}
+				const cur = typeof globalCfg.mode === "string" ? globalCfg.mode : "agent";
+				const hotkey = typeof globalCfg.key === "string" ? globalCfg.key : null;
+				const header = hotkey ? `tars-voice commands (hotkey: ${hotkey})` : "tars-voice commands";
+				ctx.ui.notify(
+					[
+						header,
+						"  /voice help      show this help",
+						"  /voice status    show daemon status",
+						"  /voice start     start the daemon",
+						"  /voice stop      stop the daemon",
+						"  /voice dictate   switch to dictate mode (transcript pastes into focused app)",
+						"  /voice agent     switch to agent mode (runs pi + speaks reply)",
+						`current mode: ${cur} (change applies on next key press, no restart needed)`,
+				].join("\n"),
+					"info",
+				);
+				return;
+			}
 
 			if (sub === "start") {
 				const res = await runBinary(binary, ["start", cwd], cwd);
