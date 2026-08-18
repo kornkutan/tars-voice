@@ -5,8 +5,9 @@ Push-to-talk voice control for the [Pi Coding Agent](https://github.com/badlogic
 installed `pi` runs the command with full TARS config (extensions, models,
 skills, AGENTS.md). The agent's reply is spoken back via macOS `say`.
 
-Single static Rust binary (~2 MB). No Electron, no Node runtime for the
-daemon, no bundled agent SDK (it shells out to your real `pi`).
+Single static Rust binary (~2 MB). No Node runtime for the daemon, no
+bundled agent SDK (it shells out to your installed `pi`, so it always runs
+your version with your full config).
 
 ## Architecture
 
