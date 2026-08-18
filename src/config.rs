@@ -10,10 +10,14 @@ pub struct Config {
     pub model: String,
     /// Optional pi --model pattern; empty = pi's configured default
     pub agent_model: String,
+    /// Extra env vars injected into the pi subprocess, e.g. provider keys
+    pub agent_env: std::collections::HashMap<String, String>,
     /// Speak the agent's response with macOS `say`
     pub say: bool,
     /// Optional `say -v` voice name
     pub say_voice: Option<String>,
+    /// Optional `say -r` words-per-minute (slower = smaller number)
+    pub say_rate: Option<u32>,
     /// Whisper language: "auto" or ISO code ("en", "th", ...)
     pub language: String,
     /// Ephemeral commands (no persistent session)
@@ -26,8 +30,10 @@ impl Default for Config {
             key: "alt+space".into(),
             model: "large-v3-turbo-q5_0".into(),
             agent_model: String::new(),
+            agent_env: std::collections::HashMap::new(),
             say: true,
             say_voice: None,
+            say_rate: None,
             language: "auto".into(),
             no_session: false,
         }

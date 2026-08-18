@@ -17,6 +17,12 @@ pub fn start() -> Result<Recorder> {
         .default_input_device()
         .ok_or_else(|| anyhow!("no audio input device found"))?;
     let supported = device.default_input_config()?;
+    eprintln!(
+        "[tars-voice] input device: {} ({:?} {}ch)",
+        device.name().unwrap_or_else(|_| "unknown".into()),
+        supported.sample_format(),
+        supported.channels()
+    );
     let rate = supported.sample_rate().0;
     let channels = supported.channels();
     let fmt = supported.sample_format();
@@ -51,6 +57,13 @@ impl Recorder {
     pub fn finish(self) -> Vec<f32> {
         drop(self._stream);
         let raw = self.samples.lock().unwrap().clone();
+        let peak = raw.iter().fold(0.0f32, |m, s| m.max(s.abs()));
+        eprintln!(
+            "[tars-voice] captured {} frames @ {}Hz {}ch, peak {peak:.4}",
+            raw.len(),
+            self.native_rate,
+            self.channels
+        );
         if raw.is_empty() {
             return Vec::new();
         }

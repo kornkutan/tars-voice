@@ -48,6 +48,7 @@ pub fn run() -> Result<()> {
     eprintln!("[tars-voice] ready - hold {} to talk", cfg.key);
 
     let mut recorder: Option<audio::Recorder> = None;
+    let mut rec_started_at = std::time::Instant::now();
 
     loop {
         let ev = match rx.recv() {
@@ -59,6 +60,7 @@ pub fn run() -> Result<()> {
                 if recorder.is_none() {
                     match audio::start() {
                         Ok(rec) => {
+                            rec_started_at = std::time::Instant::now();
                             recorder = Some(rec);
                             st.state = "recording".into();
                             st.transcript.clear();
@@ -68,7 +70,7 @@ pub fn run() -> Result<()> {
                         }
                         Err(e) => {
                             eprintln!("[tars-voice] mic error: {e:#}");
-                            tts::speak("microphone error", cfg.say_voice.as_deref());
+                            tts::speak("microphone error", cfg.say_voice.as_deref(), cfg.say_rate);
                         }
                     }
                 }
@@ -81,6 +83,10 @@ pub fn run() -> Result<()> {
                 st.updated_at = state::now_ms();
                 state::write(&st);
 
+                eprintln!(
+                    "[tars-voice] recording window: {} ms",
+                    rec_started_at.elapsed().as_millis()
+                );
                 let samples = rec.finish();
                 let transcript = match stt.transcribe(&samples, &cfg.language) {
                     Ok(t) => t,
@@ -113,14 +119,14 @@ pub fn run() -> Result<()> {
                         eprintln!("[tars-voice] response: {}", truncate(&response, 200));
                         st.response = response.clone();
                         if cfg.say {
-                            tts::speak(&response, cfg.say_voice.as_deref());
+                            tts::speak(&response, cfg.say_voice.as_deref(), cfg.say_rate);
                         }
                     }
                     Err(e) => {
                         eprintln!("[tars-voice] agent error: {e:#}");
                         st.response = format!("error: {e:#}");
                         if cfg.say {
-                            tts::speak("agent error", cfg.say_voice.as_deref());
+                            tts::speak("agent error", cfg.say_voice.as_deref(), cfg.say_rate);
                         }
                     }
                 }

@@ -35,6 +35,8 @@ say "==> building (release, arm64 native)..."
 
 say "==> installing binary to $BIN_PATH"
 mkdir -p "$BIN_DIR"
+# rm first: cp-overwrite on a running binary makes macOS AMFI SIGKILL new execs
+rm -f "$BIN_PATH"
 cp "$REPO_ROOT/target/release/tars-voice" "$BIN_PATH"
 chmod +x "$BIN_PATH"
 
