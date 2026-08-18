@@ -16,12 +16,13 @@ pub struct Config {
     pub say: bool,
     /// Optional `say -v` voice name
     pub say_voice: Option<String>,
-    /// Optional `say -r` words-per-minute (slower = smaller number)
     pub say_rate: Option<u32>,
     /// Whisper language: "auto" or ISO code ("en", "th", ...)
     pub language: String,
     /// Ephemeral commands (no persistent session)
     pub no_session: bool,
+    /// Mode: "agent" (run pi + speak reply) or "dictate" (paste transcript into focused app)
+    pub mode: String,
 }
 
 impl Default for Config {
@@ -36,6 +37,7 @@ impl Default for Config {
             say_rate: None,
             language: "auto".into(),
             no_session: false,
+            mode: "agent".into(),
         }
     }
 }

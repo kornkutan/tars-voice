@@ -1,4 +1,4 @@
-use crate::{agent, audio, config::Config, hotkey, state, stt::Stt, tts};
+use crate::{agent, audio, config::Config, dictation, hotkey, state, stt::Stt, tts};
 use anyhow::Result;
 use std::path::PathBuf;
 
@@ -10,7 +10,7 @@ pub fn run() -> Result<()> {
     let cwd = cwd.canonicalize().unwrap_or(cwd);
     let cwd_str = cwd.to_string_lossy().into_owned();
 
-    let cfg = Config::load(&cwd)?;
+    let mut cfg = Config::load(&cwd)?;
     std::fs::create_dir_all(state::data_dir())?;
     std::fs::write(state::pid_path(), std::process::id().to_string())?;
 
@@ -51,6 +51,10 @@ pub fn run() -> Result<()> {
     let mut rec_started_at = std::time::Instant::now();
 
     loop {
+        // pick up config edits (mode, say settings) without a daemon restart
+        if let Ok(fresh) = Config::load(&cwd) {
+            cfg = fresh;
+        }
         let ev = match rx.recv() {
             Ok(ev) => ev,
             Err(_) => break, // hotkey thread died
@@ -109,10 +113,20 @@ pub fn run() -> Result<()> {
                 }
                 eprintln!("[tars-voice] transcript: {transcript}");
 
+                if cfg.mode == "dictate" {
+                    st.transcript = transcript.clone();
+                    st.state = "dictating".into();
+                    st.updated_at = state::now_ms();
+                    state::write(&st);
+                    dictation::paste(&transcript);
+                    st.state = "idle".into();
+                    st.updated_at = state::now_ms();
+                    state::write(&st);
+                    continue;
+                }
+
                 st.state = "working".into();
                 st.transcript = transcript.clone();
-                st.updated_at = state::now_ms();
-                state::write(&st);
 
                 match agent::run(&transcript, &cwd, &session_id, &cfg) {
                     Ok(response) => {

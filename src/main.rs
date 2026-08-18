@@ -2,6 +2,7 @@ mod agent;
 mod audio;
 mod config;
 mod daemon;
+mod dictation;
 mod hotkey;
 mod state;
 mod stt;

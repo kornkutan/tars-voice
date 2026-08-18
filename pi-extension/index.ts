@@ -1,6 +1,6 @@
 import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 import { execFile } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { readFileSync, writeFileSync } from "node:fs";
 import * as path from "node:path";
 import * as os from "node:os";
 
@@ -73,6 +73,8 @@ function statusText(st: DaemonState | null): string | undefined {
 			return st.transcript
 				? `VOICE: working (${truncate(st.transcript, 30)})`
 				: "VOICE: working";
+		case "dictating":
+			return "VOICE: dictating";
 		case "error":
 			return "VOICE: error";
 		case "starting":
@@ -161,6 +163,19 @@ export default function (pi: ExtensionAPI) {
 			} else if (sub === "stop") {
 				const res = await runBinary(binary, ["stop"], cwd);
 				ctx.ui.notify(res.stdout || "stopped", res.code === 0 ? "info" : "warning");
+			} else if (sub === "dictate" || sub === "agent") {
+				// read-modify-write the global config; daemon hot-reloads per key press
+				const global = path.join(os.homedir(), ".pi", "tars-voice.json");
+				let obj: Record<string, unknown> = {};
+				try {
+					obj = JSON.parse(readFileSync(global, "utf-8"));
+				} catch {}
+				obj.mode = sub;
+				writeFileSync(global, JSON.stringify(obj, null, 2) + "\n");
+				ctx.ui.notify(
+					`mode: ${sub}${sub === "dictate" ? " (transcript pastes into focused app)" : " (runs pi + speaks reply)"} - picked up on next key press`,
+					"info",
+				);
 			} else {
 				const res = await runBinary(binary, ["status"], cwd);
 				const msg = res.stdout || res.stderr || "no status";

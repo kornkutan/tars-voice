@@ -80,6 +80,8 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
 - `say_voice` — optional `say -v` voice name.
 - `language` — `auto` or an ISO code (`en`, `th`, ...).
 - `no_session` — ephemeral commands (no persistent `--session-id`).
+- `mode` — `"agent"` (default): run `pi` and speak the reply. `"dictate"`: paste
+  the transcript into the focused app (clipboard + Cmd+V), no agent, no speech.
 
 ## macOS permission (one-time)
 
@@ -96,6 +98,8 @@ Restart Pi after installing. It adds:
 
 - a `VOICE:` status-bar line (idle / REC / working / error)
 - the `/voice start|stop|status` slash command
+- `/voice dictate` and `/voice agent` to switch modes; the daemon picks up the
+  change on the next key press (config is hot-reloaded per event)
 
 Its sibling `config.json` can override `binaryPath`, `statePath`,
 `pollIntervalMs`.
