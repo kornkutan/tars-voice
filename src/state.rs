@@ -36,7 +36,7 @@ pub fn state_path() -> PathBuf {
 
 pub fn data_dir() -> PathBuf {
     let home = std::env::var("HOME").unwrap_or_default();
-    PathBuf::from(home).join(".pi-agent").join("tars-voice")
+    PathBuf::from(home).join(".pi").join("voice")
 }
 
 pub fn pid_path() -> PathBuf {

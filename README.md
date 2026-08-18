@@ -24,7 +24,7 @@ tars-voice (Rust binary)
 Local-only speech: whisper STT + macOS `say` TTS. No cloud speech
 providers.
 
-State is written to `~/.pi-agent/tars-voice/state.json`, read by the Pi
+State is written to `~/.pi/voice/state.json`, read by the Pi
 status-bar extension (`~/.pi/agent/extensions/voice/`) so you get a `VOICE:`
 indicator and `/voice start|stop|status` slash commands inside Pi.
 
@@ -40,7 +40,7 @@ cp target/release/tars-voice ~/bin/tars-voice
 ```
 
 The `metal` feature is on by default (Apple Silicon GPU). First run downloads
-the whisper model to `~/.pi-agent/whisper/`.
+the whisper model to `~/Library/Caches/tars-voice/whisper/`.
 
 ## Usage
 

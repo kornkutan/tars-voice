@@ -8,8 +8,8 @@ BIN_DIR="$HOME/bin"
 BIN_PATH="$BIN_DIR/tars-voice"
 PI_EXT_DIR="$HOME/.pi/agent/extensions/voice"
 PI_GLOBAL_CFG="$HOME/.pi/tars-voice.json"
-DATA_DIR="$HOME/.pi-agent/tars-voice"
-WHISPER_DIR="$HOME/.pi-agent/whisper"
+DATA_DIR="$HOME/.pi/voice"
+WHISPER_DIR="$HOME/Library/Caches/tars-voice/whisper"
 
 say() { printf '%s\n' "$*"; }
 ask() {

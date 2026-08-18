@@ -9,7 +9,9 @@ pub struct Stt {
 pub fn model_path(model: &str) -> PathBuf {
     let home = std::env::var("HOME").unwrap_or_default();
     PathBuf::from(home)
-        .join(".pi-agent")
+        .join("Library")
+        .join("Caches")
+        .join("tars-voice")
         .join("whisper")
         .join(format!("ggml-{model}.bin"))
 }

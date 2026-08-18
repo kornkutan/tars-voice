@@ -26,8 +26,8 @@ function loadConfig(): VoiceConfig {
 const DEFAULT_BINARY = path.join(os.homedir(), "bin", "tars-voice");
 const DEFAULT_STATE = path.join(
 	os.homedir(),
-	".pi-agent",
-	"tars-voice",
+	".pi",
+	"voice",
 	"state.json",
 );
 

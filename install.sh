@@ -3,7 +3,7 @@
 #   - binary           -> ~/bin/tars-voice
 #   - Pi extension     -> ~/.pi/agent/extensions/voice/
 #   - default config   -> ~/.pi/tars-voice.json (only if missing)
-#   - runtime dirs     -> ~/.pi-agent/tars-voice, ~/.pi-agent/whisper
+#   - runtime dirs     -> ~/.pi/voice, ~/Library/Caches/tars-voice/whisper
 
 set -euo pipefail
 
@@ -12,8 +12,8 @@ BIN_DIR="$HOME/bin"
 BIN_PATH="$BIN_DIR/tars-voice"
 PI_EXT_DIR="$HOME/.pi/agent/extensions/voice"
 PI_GLOBAL_CFG="$HOME/.pi/tars-voice.json"
-DATA_DIR="$HOME/.pi-agent/tars-voice"
-WHISPER_DIR="$HOME/.pi-agent/whisper"
+DATA_DIR="$HOME/.pi/voice"
+WHISPER_DIR="$HOME/Library/Caches/tars-voice/whisper"
 
 say() { printf '%s\n' "$*"; }
 die() { printf 'error: %s\n' "$*" >&2; exit 1; }

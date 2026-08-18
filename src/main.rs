@@ -39,10 +39,12 @@ Usage:
   tars-voice stop          Stop the daemon
 
 Config: <cwd>/.pi/tars-voice.json (falls back to ~/.pi/tars-voice.json)
+  {{ \"key\": \"alt+space\", \"model\": \"large-v3-turbo-q5_0\",
      \"say\": true, \"language\": \"auto\" }}
 
-State:  ~/.pi-agent/tars-voice/state.json (read by the Pi status bar)
-Log:    ~/.pi-agent/tars-voice/daemon.log"
+State:  ~/.pi/voice/state.json (read by the Pi status bar)
+Log:    ~/.pi/voice/daemon.log
+Model:  ~/Library/Caches/tars-voice/whisper/"
     );
 }
 
