@@ -1,0 +1,18 @@
+[package]
+name = "tars-voice"
+version = "0.1.0"
+edition = "2021"
+description = "Push-to-talk voice control for the Pi Coding Agent (TARS)"
+license = "MIT"
+
+[dependencies]
+rdev = { version = "0.5", features = ["unstable_grab"] }
+cpal = "0.15"
+whisper-rs = { version = "0.14", features = ["metal"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+anyhow = "1"
+
+[profile.release]
+lto = true
+strip = true
