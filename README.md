@@ -18,7 +18,6 @@ tars-voice (Rust binary)
   stt       whisper-rs (whisper.cpp, Metal) -> ggml model transcribe
   agent     spawn `pi -p --mode json --session-id tars-voice-<cwd-hash> "<text>"`
   tts       pipe final assistant text to macOS `say`
-  tts       pipe final assistant text to macOS `say`
 ```
 
 Local-only speech: whisper STT + macOS `say` TTS. No cloud speech
@@ -33,6 +32,13 @@ indicator and `/voice start|stop|status` slash commands inside Pi.
 Requires Xcode command line tools (clang, cmake) and Rust. Build natively on
 Apple Silicon (the whisper.cpp CMake step needs a consistent arm64 environment;
 if your shell runs under Rosetta, prefix commands with `arch -arm64`).
+
+```sh
+./install.sh    # build + install binary, deploy Pi extension, default config
+./uninstall.sh  # remove (prompts before deleting config / model cache)
+```
+
+Or manually:
 
 ```sh
 cargo build --release
@@ -84,8 +90,9 @@ Global hotkeys need Accessibility. If `tars-voice status` shows
 
 ## Pi integration
 
-The companion extension at `~/.pi/agent/extensions/voice/` is auto-discovered.
-Restart Pi after adding it. It adds:
+The companion extension is bundled in this repo (`pi-extension/`); `install.sh`
+deploys it to `~/.pi/agent/extensions/voice/` where Pi auto-discovers it.
+Restart Pi after installing. It adds:
 
 - a `VOICE:` status-bar line (idle / REC / working / error)
 - the `/voice start|stop|status` slash command
@@ -102,3 +109,7 @@ Its sibling `config.json` can override `binaryPath`, `statePath`,
   non-breaking space into the focused app.
 - The daemon speaks only the final assistant message (parsed from `pi -p` JSON
   `agent_end`), not tool output.
+- One daemon at a time; the cwd you start it from sets the project scope. `stop`
+  and start again from another project to switch.
+- The macOS Accessibility grant is keyed to the binary path — moving or
+  reinstalling `~/bin/tars-voice` elsewhere requires re-granting.
