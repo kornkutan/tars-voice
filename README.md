@@ -18,7 +18,11 @@ tars-voice (Rust binary)
   stt       whisper-rs (whisper.cpp, Metal) -> ggml model transcribe
   agent     spawn `pi -p --mode json --session-id tars-voice-<cwd-hash> "<text>"`
   tts       pipe final assistant text to macOS `say`
+  tts       pipe final assistant text to macOS `say`
 ```
+
+Local-only speech: whisper STT + macOS `say` TTS. No cloud speech
+providers.
 
 State is written to `~/.pi-agent/tars-voice/state.json`, read by the Pi
 status-bar extension (`~/.pi/agent/extensions/voice/`) so you get a `VOICE:`
@@ -52,7 +56,7 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
 {
   "key": "alt+space",
   "model": "large-v3-turbo-q5_0",
-  "agent_model": "*haiku*",
+  "agent_model": "",
   "say": true,
   "say_voice": null,
   "language": "auto",
@@ -64,8 +68,8 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
   + a main key (`space`, letters, `tab`, `escape`). Default `alt+space`.
 - `model` — whisper ggml model name (e.g. `large-v3-turbo-q5_0`, `medium-q5_0`,
   `base`). Bigger = more accurate, slower.
-- `agent_model` — `pi --model` pattern for the agent. Voice wants fast + cheap,
-  so `*haiku*` by default.
+- `agent_model` — optional `pi --model` pattern. Empty (default) = pi's
+  configured default model.
 - `say` — speak the agent's reply.
 - `say_voice` — optional `say -v` voice name.
 - `language` — `auto` or an ISO code (`en`, `th`, ...).

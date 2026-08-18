@@ -8,7 +8,7 @@ pub struct Config {
     pub key: String,
     /// Whisper ggml model name (large-v3-turbo-q5_0, medium-q5_0, base, ...)
     pub model: String,
-    /// pi --model pattern for the agent (voice wants fast + cheap)
+    /// Optional pi --model pattern; empty = pi's configured default
     pub agent_model: String,
     /// Speak the agent's response with macOS `say`
     pub say: bool,
@@ -25,7 +25,7 @@ impl Default for Config {
         Config {
             key: "alt+space".into(),
             model: "large-v3-turbo-q5_0".into(),
-            agent_model: "*haiku*".into(),
+            agent_model: String::new(),
             say: true,
             say_voice: None,
             language: "auto".into(),

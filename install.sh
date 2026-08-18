@@ -55,7 +55,7 @@ if [ ! -f "$PI_GLOBAL_CFG" ]; then
 {
   "key": "alt+space",
   "model": "large-v3-turbo-q5_0",
-  "agent_model": "*haiku*",
+  "agent_model": "",
   "say": true,
   "say_voice": null,
   "language": "auto",

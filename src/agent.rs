@@ -21,7 +21,9 @@ pub fn pi_bin() -> String {
 pub fn run(transcript: &str, cwd: &Path, session_id: &str, cfg: &Config) -> Result<String> {
     let mut cmd = Command::new(pi_bin());
     cmd.args(["-p", "--mode", "json"]);
-    cmd.arg("--model").arg(&cfg.agent_model);
+    if !cfg.agent_model.is_empty() {
+        cmd.arg("--model").arg(&cfg.agent_model);
+    }
     if cfg.no_session {
         cmd.arg("--no-session");
     } else {
