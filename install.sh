@@ -55,7 +55,7 @@ if [ ! -f "$PI_GLOBAL_CFG" ]; then
     say "==> writing default config $PI_GLOBAL_CFG"
     cat > "$PI_GLOBAL_CFG" << 'EOF'
 {
-  "key": "alt+space",
+  "key": "alt+m",
   "model": "large-v3-turbo-q5_0",
   "agent_model": "",
   "say": true,
@@ -81,6 +81,6 @@ say "next steps:"
 say "  1. If not done yet: System Settings > Privacy & Security > Accessibility"
 say "     -> add $BIN_PATH"
 say "  2. From a project dir: $BIN_PATH start"
-say "  3. Hold alt+space, speak, release."
+say "  3. Hold alt+m, speak, release."
 say ""
 say "note: first run downloads the whisper model (~550 MB) to $WHISPER_DIR"

@@ -61,7 +61,7 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
 
 ```json
 {
-  "key": "alt+space",
+  "key": "alt+m",
   "model": "large-v3-turbo-q5_0",
   "agent_model": "",
   "say": true,
@@ -73,7 +73,7 @@ Config lives at `<cwd>/.pi/tars-voice.json` (falls back to `~/.pi/tars-voice.jso
 ```
 
 - `key` — push-to-talk combo: modifiers (`ctrl`/`shift`/`alt`|`opt`/`meta`|`cmd`)
-  + a main key (`space`, letters, `tab`, `escape`). Default `alt+space`.
+  + a main key (`space`, letters, `tab`, `escape`). Default `alt+m`.
 - `model` — whisper ggml model name (e.g. `large-v3-turbo-q5_0`, `medium-q5_0`,
   `base`). Bigger = more accurate, slower.
 - `agent_model` — optional `pi --model` pattern. Empty (default) = pi's
@@ -111,11 +111,16 @@ Its sibling `config.json` can override `binaryPath`, `statePath`,
 - Sessions persist per project via `--session-id tars-voice-<hash-of-cwd>`, so
   multi-turn voice commands share context across daemon restarts. Set
   `no_session: true` for one-shot commands.
-- The grab callback swallows the push-to-talk key, so `alt+space` won't type a
-  non-breaking space into the focused app.
+- The grab callback swallows the push-to-talk key, so `alt+m` won't type
+  `µ` into the focused app.
 - The daemon speaks only the final assistant message (parsed from `pi -p` JSON
   `agent_end`), not tool output.
 - One daemon at a time; the cwd you start it from sets the project scope. `stop`
   and start again from another project to switch.
 - The macOS Accessibility grant is keyed to the binary path — moving or
+  reinstalling `~/bin/tars-voice` elsewhere requires re-granting.
+
+## License
+
+[MIT](LICENSE) © kornkutan
   reinstalling `~/bin/tars-voice` elsewhere requires re-granting.

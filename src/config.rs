@@ -4,7 +4,7 @@ use std::path::{Path, PathBuf};
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(default)]
 pub struct Config {
-    /// Push-to-talk combo: modifiers + main key, e.g. "alt+space", "ctrl+shift+v"
+    /// Push-to-talk combo: modifiers + main key, e.g. "alt+m", "ctrl+shift+v"
     pub key: String,
     /// Whisper ggml model name (large-v3-turbo-q5_0, medium-q5_0, base, ...)
     pub model: String,
@@ -28,7 +28,7 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
-            key: "alt+space".into(),
+            key: "alt+m".into(),
             model: "large-v3-turbo-q5_0".into(),
             agent_model: String::new(),
             agent_env: std::collections::HashMap::new(),
@@ -54,7 +54,7 @@ impl Config {
                 let mut cfg: Config = serde_json::from_str(&raw)?;
                 // allow partial overrides on top of defaults
                 if raw.contains("\"key\"") == false && cfg.key.is_empty() {
-                    cfg.key = "alt+space".into();
+                    cfg.key = "alt+m".into();
                 }
                 return Ok(cfg);
             }
