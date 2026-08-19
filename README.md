@@ -122,5 +122,4 @@ Its sibling `config.json` can override `binaryPath`, `statePath`,
 
 ## License
 
-[MIT](LICENSE) © kornkutan
-  reinstalling `~/bin/tars-voice` elsewhere requires re-granting.
+[MIT](LICENSE)
